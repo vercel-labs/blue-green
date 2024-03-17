@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Blue-green deployments (also knows as canary deployments) for Vercel.
+
+[For a demo, click here.](https://blue-green.vercel.app/)
 
 ## Getting Started
 
-First, run the development server:
+- Deploy the project to Vercel
+- Activate [Skew Protection](https://vercel.com/docs/deployments/skew-protection) for the project.
+- Activate [Deployment protection bypass](https://vercel.com/docs/security/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation) for the project.
+- Create an [Edge Config](https://vercel.com/docs/storage/edge-config).
+- Deploy the following Edge Config:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```json
+{
+  "blue-green-configuration": {
+    "deploymentDomainBlue": "blue-r7nr8gkr5.vercel.app",
+    "deploymentDomainGreen": "green-r7nr8gkr5.vercel.app",
+    "trafficGreenPercent": 50
+  }
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The fields `deploymentDomainBlue` and `deploymentDomainGreen` must be valid deployments for your projects.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+See this project's [middleware.ts file](https://github.com/vercel-labs/blue-green/blob/main/middleware.ts) for the logic implementing the blue-green/canary logic.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Executing a blue-green deployment
 
-## Learn More
+With the middleware belonging to this project deployed, Vercel will only serve the deployment specified in your Edge Config. The simplest way to perform a blue-green deployment would be to manually update the Edge Config. Upon saving it, the new deployments will begin serving.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+For CI/CD-driven blue-green deployments, you can integrate the [Edge Config API](https://vercel.com/docs/storage/edge-config/vercel-api#update-your-edge-config-items) with your CD system.
