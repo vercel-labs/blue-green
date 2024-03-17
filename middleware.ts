@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
   }
   // Skip if the middleware has already run.
   if (req.headers.get("x-deployment-override")) {
-    return getDeploymentWithCookie();
+    return getDeploymentWithCookieBasedOnEnvVar();
   }
   // Get the blue/green configuration from Edge Config.
   const blueGreenConfig = await get<BlueGreenConfig>(
@@ -45,7 +45,7 @@ export async function middleware(req: NextRequest) {
   }
   // The selected deployment domain is the same as the one serving the request.
   if (servingDeploymentDomain === selectedDeploymentDomain) {
-    return getDeploymentWithCookie();
+    return getDeploymentWithCookieBasedOnEnvVar();
   }
   // Fetch the HTML document from the selected deployment domain and return it to the user.
   const headers = new Headers(req.headers);
@@ -76,10 +76,14 @@ function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
   return selected;
 }
 
-function getDeploymentWithCookie() {
+function getDeploymentWithCookieBasedOnEnvVar() {
   const response = NextResponse.next();
   // We need to set this cookie because next.js does not do this by default, but we do want
   // the deployment choice to survive a client-side navigation.
-  response.cookies.set("vdpl", process.env.VERCEL_DEPLOYMENT_ID || "");
+  response.cookies.set("vdpl", process.env.VERCEL_DEPLOYMENT_ID || "", {
+    sameSite: "strict",
+    httpOnly: true,
+    maxAge: 60 * 60 * 24, // 24 hours
+  });
   return response;
 }
