@@ -30,6 +30,9 @@ export async function middleware(req: NextRequest) {
   const servingDeploymentDomain = process.env.VERCEL_URL;
   const selectedDeploymentDomain =
     selectBlueGreenDeploymentDomain(blueGreenConfig);
+  if (!selectedDeploymentDomain) {
+    return NextResponse.next();
+  }
   if (servingDeploymentDomain === selectedDeploymentDomain) {
     return NextResponse.next();
   }
@@ -49,7 +52,13 @@ export async function middleware(req: NextRequest) {
 
 function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
   const random = Math.random() * 100;
-  return random < blueGreenConfig.trafficGreenPercent
-    ? blueGreenConfig.deploymentDomainGreen
-    : blueGreenConfig.deploymentDomainBlue;
+
+  const selected =
+    random < blueGreenConfig.trafficGreenPercent
+      ? blueGreenConfig.deploymentDomainGreen
+      : blueGreenConfig.deploymentDomainBlue || process.env.VERCEL_URL;
+  if (!selected) {
+    console.error("Blue green configuration error", blueGreenConfig);
+  }
+  return null;
 }
