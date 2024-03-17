@@ -1,6 +1,7 @@
 import { get } from "@vercel/edge-config";
 import { NextRequest, NextResponse } from "next/server";
 
+// Configuration stored in Edge Config.
 interface BlueGreenConfig {
   deploymentDomainBlue: string;
   deploymentDomainGreen: string;
@@ -8,24 +9,22 @@ interface BlueGreenConfig {
 }
 
 export async function middleware(req: NextRequest) {
-  console.info(
-    "Middleware",
-    req.headers.get("sec-fetch-dest"),
-    req.method,
-    req.headers.get("x-deployment-override")
-  );
+  // We don't want to run blue/green during development.
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.next();
   }
+  // We only want to run blue/green for GET requests that are for HTML documents.
   if (req.method !== "GET") {
     return NextResponse.next();
   }
   if (req.headers.get("sec-fetch-dest") !== "document") {
     return NextResponse.next();
   }
+  // Skip if the middleware has already run.
   if (req.headers.get("x-deployment-override")) {
     return NextResponse.next();
   }
+  // Get the blue/green configuration from Edge Config.
   const blueGreenConfig = await get<BlueGreenConfig>(
     "blue-green-configuration"
   );
@@ -44,9 +43,11 @@ export async function middleware(req: NextRequest) {
   if (!selectedDeploymentDomain) {
     return NextResponse.next();
   }
+  // The selected deployment domain is the same as the one serving the request.
   if (servingDeploymentDomain === selectedDeploymentDomain) {
     return NextResponse.next();
   }
+  // Fetch the HTML document from the selected deployment domain and return it to the user.
   const headers = new Headers(req.headers);
   headers.set("x-deployment-override", selectedDeploymentDomain);
   headers.set(
@@ -61,6 +62,7 @@ export async function middleware(req: NextRequest) {
   });
 }
 
+// Selects the deployment domain based on the blue/green configuration.
 function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
   const random = Math.random() * 100;
 
