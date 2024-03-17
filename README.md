@@ -4,10 +4,10 @@ Blue-green deployments (also knows as canary deployments) for Vercel.
 
 ## Getting Started
 
-- Deploy the project to Vercel
-- Activate [Skew Protection](https://vercel.com/docs/deployments/skew-protection) for the project.
-- Activate [Deployment protection bypass](https://vercel.com/docs/security/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation) for the project.
-- Create an [Edge Config](https://vercel.com/docs/storage/edge-config).
+- Deploy this repository as a new project to Vercel
+- Activate [Skew Protection](https://vercel.com/docs/deployments/skew-protection) for the project
+- Activate [Deployment protection bypass](https://vercel.com/docs/security/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation) for the project
+- Create an [Edge Config](https://vercel.com/docs/storage/edge-config)
 - Deploy the following Edge Config:
 
 ```json
@@ -20,7 +20,7 @@ Blue-green deployments (also knows as canary deployments) for Vercel.
 }
 ```
 
-The fields `deploymentDomainBlue` and `deploymentDomainGreen` must be valid deployments for your projects.
+The fields `deploymentDomainBlue` and `deploymentDomainGreen` must be valid [deployment domains](https://vercel.com/docs/deployments/generated-urls) for your projects.
 
 See this project's [middleware.ts file](https://github.com/vercel-labs/blue-green/blob/main/middleware.ts) for the logic implementing the blue-green/canary logic.
 
