@@ -8,6 +8,12 @@ interface BlueGreenConfig {
 }
 
 export async function middleware(req: NextRequest) {
+  console.info(
+    "Middleware",
+    req.headers.get("sec-fetch-dest"),
+    req.method,
+    req.headers.get("x-deployment-override")
+  );
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.next();
   }
@@ -30,6 +36,7 @@ export async function middleware(req: NextRequest) {
   const servingDeploymentDomain = process.env.VERCEL_URL;
   const selectedDeploymentDomain =
     selectBlueGreenDeploymentDomain(blueGreenConfig);
+  console.info("Selected deployment domain", selectedDeploymentDomain);
   if (!selectedDeploymentDomain) {
     return NextResponse.next();
   }
