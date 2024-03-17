@@ -71,5 +71,5 @@ function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
   if (!selected) {
     console.error("Blue green configuration error", blueGreenConfig);
   }
-  return null;
+  return selected;
 }
