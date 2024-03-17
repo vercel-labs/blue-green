@@ -36,7 +36,11 @@ export async function middleware(req: NextRequest) {
   const servingDeploymentDomain = process.env.VERCEL_URL;
   const selectedDeploymentDomain =
     selectBlueGreenDeploymentDomain(blueGreenConfig);
-  console.info("Selected deployment domain", selectedDeploymentDomain);
+  console.info(
+    "Selected deployment domain",
+    selectedDeploymentDomain,
+    blueGreenConfig
+  );
   if (!selectedDeploymentDomain) {
     return NextResponse.next();
   }
