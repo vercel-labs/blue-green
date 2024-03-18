@@ -93,7 +93,7 @@ function getDeploymentWithCookieBasedOnEnvVar() {
   const response = NextResponse.next();
   // We need to set this cookie because next.js does not do this by default, but we do want
   // the deployment choice to survive a client-side navigation.
-  response.cookies.set("vdpl", process.env.VERCEL_DEPLOYMENT_ID || "", {
+  response.cookies.set("__vdpl", process.env.VERCEL_DEPLOYMENT_ID || "", {
     sameSite: "strict",
     httpOnly: true,
     maxAge: 60 * 60 * 24, // 24 hours
