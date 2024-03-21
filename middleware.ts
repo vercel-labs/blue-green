@@ -37,6 +37,10 @@ export async function middleware(req: NextRequest) {
   if (req.headers.get("x-deployment-override")) {
     return getDeploymentWithCookieBasedOnEnvVar();
   }
+  if (!process.env.EDGE_CONFIG) {
+    console.warn("EDGE_CONFIG env variable not set. Skipping blue/green.");
+    return NextResponse.next();
+  }
   // Get the blue/green configuration from Edge Config.
   const blueGreenConfig = await get<BlueGreenConfig>(
     "blue-green-configuration"
