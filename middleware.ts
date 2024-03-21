@@ -33,6 +33,10 @@ export async function middleware(req: NextRequest) {
   if (req.headers.get("sec-fetch-dest") !== "document") {
     return NextResponse.next();
   }
+  // Skip if the request is coming from Vercel's deployment system.
+  if (/vercel/i.test(req.headers.get("user-agent") || "")) {
+    return NextResponse.next();
+  }
   // Skip if the middleware has already run.
   if (req.headers.get("x-deployment-override")) {
     return getDeploymentWithCookieBasedOnEnvVar();
