@@ -27,14 +27,34 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  create-commit-bump:
+  create-blue-green-deployments:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # `1` means fetch the latest commit without full history, so it's fast and efficient
           fetch-depth: 1
+      - name: Set node version
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+      - name: Enable corepack
+        run: corepack enable pnpm
+      - name: Set pnpm version
+        uses: pnpm/action-setup@v3
+        with:
+          run_install: false
+          version: 8
+      - name: Cache node_modules
+        id: node-modules-cache
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: node-modules-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: pnpm install --no-frozen-lockfile
       - name: Install Vercel CLI
         run: npm install --global vercel
       - name: Get Vercel Environment Variables
