@@ -75,7 +75,7 @@ jobs:
         run: echo "url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
       - name: Update Edge Config
         run: |
-          curl -X 'PATCH' 'https://api.vercel.com/v1/edge-config/${{ secrets.VERCEL_EDGE_CONFIG_ID }}/items' \
+          curl -X 'PATCH' 'https://api.vercel.com/v1/edge-config/${{ secrets.VERCEL_EDGE_CONFIG_ID }}/items?teamId=${{ secrets.VERCEL_ORG_ID }}' \
           -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
           -H 'Content-Type: application/json' \
           -d $'{ "items": [ { "operation": "update", "key": "blue-green-configuration", "value": { "deploymentDomainBlue": "${{ steps.deploy-blue.outputs.url }}", "deploymentDomainGreen": "${{ steps.deploy-green.outputs.url }}", "trafficGreenPercent": 50 } } ] }'
