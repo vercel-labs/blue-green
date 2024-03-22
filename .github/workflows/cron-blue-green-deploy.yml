@@ -1,0 +1,47 @@
+name: Cron Blue Green Deploy
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+  # Allow manual runs
+  workflow_dispatch:
+  # Run every day https://crontab.guru/every-day
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  create-commit-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        # `1` means fetch the latest commit without full history, so it's fast and efficient
+        with:
+          fetch-depth: 1
+      - name: Install Vercel CLI
+        run: npm install --global vercel
+      - name: Get Vercel Environment Variables
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Update CSS to Blue
+        run: echo "body {background: blue;}" > ./app/blue-green.css
+      - name: Build Blue
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Blue
+        id: deploy-blue
+        run: echo "::set-output name=url::$(cat vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})"
+      - name: Update CSS to Green
+        run: echo "body {background: green;}" > ./app/blue-green.css
+      - name: Build Green
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Breen
+        id: deploy-green
+        run: echo "::set-output name=url::$(cat vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})"
+      - name: Update Edge Config
+        run: |
+          curl -X 'PATCH' 'https://api.vercel.com/v1/edge-config/${{ secrets.VERCEL_EDGE_CONFIG_ID }}/items' \
+          -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
+          -H 'Content-Type: application/json' \
+          -d $'{ "blue-green-configuration": { "deploymentDomainBlue": "${{ steps.deploy-blue.outputs.url }}", "deploymentDomainGreen": ${{ steps.deploy-green.outputs.url }}", "trafficGreenPercent": 50 } }'
+
