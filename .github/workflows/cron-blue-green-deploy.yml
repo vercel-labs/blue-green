@@ -78,4 +78,4 @@ jobs:
           curl -X 'PATCH' 'https://api.vercel.com/v1/edge-config/${{ secrets.VERCEL_EDGE_CONFIG_ID }}/items' \
           -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
           -H 'Content-Type: application/json' \
-          -d $'{ "blue-green-configuration": { "deploymentDomainBlue": "${{ steps.deploy-blue.outputs.url }}", "deploymentDomainGreen": "${{ steps.deploy-green.outputs.url }}", "trafficGreenPercent": 50 } }'
+          -d $'{ "items": [ { "operation": "update", "key": "blue-green-configuration", "value": { "deploymentDomainBlue": "${{ steps.deploy-blue.outputs.url }}", "deploymentDomainGreen": "${{ steps.deploy-green.outputs.url }}", "trafficGreenPercent": 50 } } ] }'
