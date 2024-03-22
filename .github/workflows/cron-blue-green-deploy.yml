@@ -7,6 +7,21 @@ env:
 on:
   # Allow manual runs
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "information"
+        type: choice
+        options:
+          - information
+          - debug
+          - warning
+          - critical
+      tags:
+        description: "Purpose of Run This Workflow?"
+        required: true
+        type: string
   # Run every day https://crontab.guru/every-day
   schedule:
     - cron: "0 0 * * *"
@@ -17,8 +32,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        # `1` means fetch the latest commit without full history, so it's fast and efficient
         with:
+          # `1` means fetch the latest commit without full history, so it's fast and efficient
           fetch-depth: 1
       - name: Install Vercel CLI
         run: npm install --global vercel
