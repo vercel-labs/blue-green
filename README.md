@@ -12,7 +12,7 @@ This is typically done using load balancers to direct traffic, but with [Vercel'
 
 The blue-green deployment strategy is great for managing risk, giving you the ability to gradually roll out a new version of your application (including breaking changes) or go back to using the previous version instantaneously.
 
-## Getting Started
+## Getting started
 
 - [Deploy this template](https://vercel.com/templates/next.js/blue-green-deployments-vercel)
 - Activate [Skew Protection](https://vercel.com/docs/deployments/skew-protection) for the project
