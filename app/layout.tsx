@@ -6,7 +6,7 @@ import "./blue-green.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Blue/Green deployments for Vercel",
+  title: "Blue-Green deployments on Vercel",
 };
 
 export default function RootLayout({
