@@ -22,11 +22,11 @@ interface BlueGreenConfig {
 }
 
 export async function middleware(req: NextRequest) {
-  // We don't want to run blue/green during development.
+  // We don't want to run blue-green during development.
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.next();
   }
-  // We only want to run blue/green for GET requests that are for HTML documents.
+  // We only want to run blue-green for GET requests that are for HTML documents.
   if (req.method !== "GET") {
     return NextResponse.next();
   }
@@ -42,10 +42,10 @@ export async function middleware(req: NextRequest) {
     return getDeploymentWithCookieBasedOnEnvVar();
   }
   if (!process.env.EDGE_CONFIG) {
-    console.warn("EDGE_CONFIG env variable not set. Skipping blue/green.");
+    console.warn("EDGE_CONFIG env variable not set. Skipping blue-green.");
     return NextResponse.next();
   }
-  // Get the blue/green configuration from Edge Config.
+  // Get the blue-green configuration from Edge Config.
   const blueGreenConfig = await get<BlueGreenConfig>(
     "blue-green-configuration"
   );
@@ -83,7 +83,7 @@ export async function middleware(req: NextRequest) {
   });
 }
 
-// Selects the deployment domain based on the blue/green configuration.
+// Selects the deployment domain based on the blue-green configuration.
 function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
   const random = Math.random() * 100;
 
