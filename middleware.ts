@@ -66,6 +66,9 @@ export async function middleware(req: NextRequest) {
   }
   // The selected deployment domain is the same as the one serving the request.
   if (servingDeploymentDomain === selectedDeploymentDomain) {
+    console.info(
+      "Fast path: selected deployment domain is the same as serving domain"
+    );
     return getDeploymentWithCookieBasedOnEnvVar();
   }
   // Fetch the HTML document from the selected deployment domain and return it to the user.
@@ -77,6 +80,7 @@ export async function middleware(req: NextRequest) {
   );
   const url = new URL(req.url);
   url.hostname = selectedDeploymentDomain;
+  console.info("Fetching", url.toString());
   return fetch(url, {
     headers,
     redirect: "manual",
@@ -98,6 +102,10 @@ function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
 }
 
 function getDeploymentWithCookieBasedOnEnvVar() {
+  console.log(
+    "Setting cookie based on env var",
+    process.env.VERCEL_DEPLOYMENT_ID
+  );
   const response = NextResponse.next();
   // We need to set this cookie because next.js does not do this by default, but we do want
   // the deployment choice to survive a client-side navigation.
