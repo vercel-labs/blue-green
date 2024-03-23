@@ -2,7 +2,7 @@
 
 # Blue-Green deployments on Vercel
 
-View demo → https://blue-green.vercel.rocks
+Demo → https://blue-green.vercel.rocks
 
 Blue-green deployments is a deployment strategy where you serve two versions of your application, "Blue" and "Green". You serve the current version of your application (Blue) and then you can then deploy a different version of your application (Green) without affecting the Blue environment.
 
