@@ -8,7 +8,7 @@ Blue-green deployments is a deployment strategy where you serve two versions of 
 
 This keeps your Blue application running seamlessly for production users while you test and deploy to your Green application. When you're done testing and ready to serve user's your Green application, you can incrementally or fully switch to your new Green application with no perceptible change for your users.
 
-This is typically done using load balancers to direct traffic, but with [Vercel's generated urls](https://vercel.com/docs/deployments/generated-urls) you can instantly switch which application is served to users seamlessly using Middleware.
+This is typically done using load balancers to direct traffic, but with [Vercel's generated urls](https://vercel.com/docs/deployments/generated-urls) you can instantly switch which application is served to users seamlessly using [Skew Protection](https://vercel.com/docs/deployments/skew-protection), [Edge Config](https://vercel.com/docs/storage/edge-config), and [Middleware in Next.js](https://nextjs.org/docs/app/building-your-application/routing/middleware),
 
 The blue-green deployment strategy is great for managing risk, giving you the ability to gradually roll out a new version of your application (including breaking changes) or go back to using the previous version instantaneously.
 
