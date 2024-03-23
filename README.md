@@ -40,4 +40,4 @@ With both deployments using the same [Middleware in this project](middleware.ts)
 
 The simplest way to perform a blue-green deployment would be to manually update the Edge Config. Upon saving it, the new deployments will begin serving.
 
-For CI/CD-driven blue-green deployments, you can automate deployments using the [Edge Config API](https://vercel.com/docs/storage/edge-config/vercel-api#update-your-edge-config-items) in your CI/CD pipeline. See this project's [`cron-blue-green-deploy.yml` file](.github/workflows/cron-blue-green-deploy.yml) for an example using GitHub Actions to create new deployments and update the Edge Config with the new deployment urls.
+For CI/CD-driven blue-green deployments, you can automate deployments using the [Edge Config API](https://vercel.com/docs/storage/edge-config/vercel-api#update-your-edge-config-items) in your CI/CD pipeline. You can see a working example of this in action by viewing the [GitHub Action in this project](.github/workflows/cron-blue-green-deploy.yml). It creates new deployments and updates the Edge Config with the new deployment urls.
