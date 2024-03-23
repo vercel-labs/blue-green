@@ -66,9 +66,6 @@ export async function middleware(req: NextRequest) {
   }
   // The selected deployment domain is the same as the one serving the request.
   if (servingDeploymentDomain === selectedDeploymentDomain) {
-    console.info(
-      "Fast path: selected deployment domain is the same as serving domain"
-    );
     return getDeploymentWithCookieBasedOnEnvVar();
   }
   // Fetch the HTML document from the selected deployment domain and return it to the user.
@@ -80,7 +77,6 @@ export async function middleware(req: NextRequest) {
   );
   const url = new URL(req.url);
   url.hostname = selectedDeploymentDomain;
-  console.info("Fetching", url.toString());
   return fetch(url, {
     headers,
     redirect: "manual",
@@ -97,6 +93,9 @@ function selectBlueGreenDeploymentDomain(blueGreenConfig: BlueGreenConfig) {
       : blueGreenConfig.deploymentDomainBlue || process.env.VERCEL_URL;
   if (!selected) {
     console.error("Blue green configuration error", blueGreenConfig);
+  }
+  if (/^http/.test(selected || "")) {
+    return new URL(selected || "").hostname;
   }
   return selected;
 }
