@@ -63,7 +63,7 @@ jobs:
         # https://vercel.com/docs/cli/pull
       - name: Get Vercel Environment Variables
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        # Create a "blue" version of the site, deloy it, adnd capture the deployment url.
+        # Create a "blue" version of the site, deloy it, and capture the deployment url.
       - name: Update CSS to Blue
         run: 'echo "body {background: blue;}" > ./app/blue-green.css'
       - name: Build Blue
@@ -71,7 +71,7 @@ jobs:
       - name: Deploy Blue
         id: deploy-blue
         run: echo "url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
-        # Create a "green" version of the site, deloy it, adnd capture the deployment url.
+        # Create a "green" version of the site, deloy it, and capture the deployment url.
       - name: Update CSS to Green
         run: 'echo "body {background: green;}" > ./app/blue-green.css'
       - name: Build Green
