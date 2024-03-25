@@ -32,11 +32,11 @@ The blue-green deployment strategy is great for managing risk, giving you the ab
 
 The fields `deploymentDomainBlue` and `deploymentDomainGreen` must be valid [deployment domains](https://vercel.com/docs/deployments/generated-urls) for your projects.
 
-See this project's [`middleware.ts` file](middleware.ts) for the logic implementing the blue-green logic.
+See this project's [`middleware.ts` file](https://github.com/vercel-labs/blue-green/blob/main/middleware.ts) for the logic implementing the blue-green logic.
 
 ## Executing a blue-green deployment
 
-With both deployments using the same [Middleware in this project](middleware.ts), Vercel will only serve the deployment specified in your Edge Config.
+With both deployments using the same [Middleware in this project](https://github.com/vercel-labs/blue-green/blob/main/middleware.ts), Vercel will only serve the deployment specified in your Edge Config.
 
 The simplest way to perform a blue-green deployment would be to manually update the Edge Config. Upon saving it, the new deployments will begin serving.
 
