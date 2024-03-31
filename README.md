@@ -2,9 +2,10 @@
 
 # Blue-Green deployments and canary deployments on Vercel
 
-Demo → https://blue-green.vercel.app
-
 Blue-green deployments is a deployment strategy where you serve two versions of your application, "Blue" and "Green". You serve the current version of your application (Blue) and then you can then deploy a different version of your application (Green) without affecting the Blue environment.
+
+- [Demo](https://blue-green.vercel.app)
+- [Detailed guide](https://vercel.com/guides/blue_green_deployments_on_vercel)
 
 This keeps your Blue application running seamlessly for production users while you test and deploy to your Green application. When you're done testing and ready to serve user's your Green application, you can incrementally or fully switch to your new Green application with no perceptible change for your users.
 
