@@ -26,8 +26,8 @@ export async function middleware(req: NextRequest) {
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.next();
   }
-  // We only run blue-green deployments when accesing from production urls
-  if (req.nextUrl.hostname !== process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+  // We skip blue-green when accesing from deployment urls
+  if (req.nextUrl.hostname === process.env.VERCEL_URL) {
     return NextResponse.next();
   }
   // We only want to run blue-green for GET requests that are for HTML documents.
