@@ -26,6 +26,10 @@ export async function middleware(req: NextRequest) {
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.next();
   }
+  // We skip blue-green when accesing from deployment urls
+  if (req.nextUrl.hostname === process.env.VERCEL_URL) {
+    return NextResponse.next();
+  }
   // We only want to run blue-green for GET requests that are for HTML documents.
   if (req.method !== "GET") {
     return NextResponse.next();
