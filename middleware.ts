@@ -26,6 +26,10 @@ export async function middleware(req: NextRequest) {
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.next();
   }
+  // Skip if the middleware has already run.
+  if (req.headers.get("x-deployment-override")) {
+    return getDeploymentWithCookieBasedOnEnvVar();
+  }
   // We skip blue-green when accesing from deployment urls
   if (req.nextUrl.hostname === process.env.VERCEL_URL) {
     return NextResponse.next();
@@ -40,10 +44,6 @@ export async function middleware(req: NextRequest) {
   // Skip if the request is coming from Vercel's deployment system.
   if (/vercel/i.test(req.headers.get("user-agent") || "")) {
     return NextResponse.next();
-  }
-  // Skip if the middleware has already run.
-  if (req.headers.get("x-deployment-override")) {
-    return getDeploymentWithCookieBasedOnEnvVar();
   }
   if (!process.env.EDGE_CONFIG) {
     console.warn("EDGE_CONFIG env variable not set. Skipping blue-green.");
