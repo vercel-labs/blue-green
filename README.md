@@ -4,6 +4,10 @@
 
 Blue-green deployments is a deployment strategy where you serve two versions of your application, "Blue" and "Green". You serve the current version of your application (Blue) and then you can then deploy a different version of your application (Green) without affecting the Blue environment.
 
+[Rolling Releases](https://vercel.com/docs/rolling-releases) are a built-in feature of Vercel that let you configure blue-green deployments with no code changes. You can create automated or manual, multi-stage rollout strategies that integrate with Observability.
+
+If you'd like to implement blue-green deployments yourself with lower-level primitives, you can use this template to do so.
+
 - [Demo](https://blue-green.vercel.app)
 - [Detailed guide](https://vercel.com/guides/blue_green_deployments_on_vercel)
 
